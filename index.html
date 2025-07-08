@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hasmitha's GitHub Search</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <form id="userInput">
+    <h1>Hasmitha's GitHub Search and Explore</h1>
+    <input type="text" id="inputBox" autocomplete="off" placeholder="Search a GitHub User" />
+  </form>
+
+  <div class="history-container">
+    <h3>Recent Searches</h3>
+    <ul id="historyList"></ul>
+  </div>
+
+  <main id="main"></main>
+  <div id="toast" class="toast"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

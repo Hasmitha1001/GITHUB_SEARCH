@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Dashboard</title>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(120deg, #fbc2eb, #a6c1ee);
+      padding: 2rem;
+      color: #333;
+    }
+    h1 {
+      color: #6a11cb;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    th, td {
+      padding: 1rem;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    th {
+      background: #6a11cb;
+      color: white;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    button {
+      margin-top: 30px;
+      padding: 10px 20px;
+      background-color: #ff4081;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>Admin Panel - User Credentials & Search History</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Password</th>
+        <th>Status</th>
+        <th>Total Searches</th>
+        <th>Search History</th>
+      </tr>
+    </thead>
+    <tbody id="userTableBody">
+      <!-- Rows will be added by JS -->
+    </tbody>
+  </table>
+
+  <button onclick="logout()">Logout</button>
+
+  <script>
+    if (localStorage.getItem("admin") !== "true") {
+      window.location.href = "login.html";
+    }
+
+    function logout() {
+      localStorage.removeItem("admin");
+      window.location.href = "login.html";
+    }
+
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const tbody = document.getElementById("userTableBody");
+
+    users.forEach(user => {
+      const row = document.createElement("tr");
+
+      const nameCell = document.createElement("td");
+      nameCell.textContent = user.username;
+
+      const passCell = document.createElement("td");
+      passCell.textContent = user.password;
+
+      const statusCell = document.createElement("td");
+      statusCell.textContent = user.status || "New";
+
+      const totalCell = document.createElement("td");
+      totalCell.textContent = Array.isArray(user.history) ? user.history.length : 0;
+
+      const historyCell = document.createElement("td");
+      const history = Array.isArray(user.history) && user.history.length > 0
+        ? user.history.map(h => typeof h === 'object' && h.name ? `<code>${h.name} (${h.time})</code>` : `<code>${h}</code>`).join(", ")
+        : "<em>No search yet</em>";
+      historyCell.innerHTML = history;
+
+      row.appendChild(nameCell);
+      row.appendChild(passCell);
+      row.appendChild(statusCell);
+      row.appendChild(totalCell);
+      row.appendChild(historyCell);
+      tbody.appendChild(row);
+    });
+  </script>
+</body>
+</html>

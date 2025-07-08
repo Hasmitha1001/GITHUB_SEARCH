@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login - Hasmitha's GitHub App</title>
+  <link rel="stylesheet" href="login.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="login-container">
+    <form class="login-form" onsubmit="login(event)">
+      <h2>Login Portal</h2>
+      <select id="role" required>
+        <option value="">Select Role</option>
+        <option value="admin">Admin</option>
+        <option value="user">User</option>
+      </select>
+      <input type="text" placeholder="Username" id="username" required />
+      <input type="password" placeholder="Password" id="password" required />
+      <button type="submit">Login</button>
+      <p class="hint">User password must have 1 uppercase, 1 special character, and be 8+ chars long.</p>
+      <p id="error" class="error"></p>
+    </form>
+  </div>
+
+  <script>
+    function login(e) {
+      e.preventDefault();
+      const role = document.getElementById("role").value;
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const error = document.getElementById("error");
+
+      if (role === "admin") {
+        if (username === "Hasmitha" && password === "Hasmitha") {
+          localStorage.setItem("admin", "true");
+          window.location.href = "admin.html";
+        } else {
+          error.textContent = "Invalid Admin Credentials!";
+        }
+      } else if (role === "user") {
+        const valid = /^(?=.*[A-Z])(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/;
+        if (!valid.test(password)) {
+          error.textContent = "User password must be at least 8 chars, 1 capital, 1 special char.";
+        } else {
+          let allUsers = JSON.parse(localStorage.getItem("users")) || [];
+
+          // Check if user already exists
+          let existingIndex = allUsers.findIndex(u => u.username === username);
+          if (existingIndex !== -1) {
+            allUsers[existingIndex].password = password; // Optionally update password
+          } else {
+            allUsers.push({ username, password, history: [] });
+          }
+
+          localStorage.setItem("users", JSON.stringify(allUsers));
+          localStorage.setItem("user", username);
+          window.location.href = "index.html";
+        }
+      } else {
+        error.textContent = "Please select a role.";
+      }
+    }
+  </script>
+</body>
+</html>
